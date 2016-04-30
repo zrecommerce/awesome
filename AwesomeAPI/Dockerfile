@@ -3,9 +3,15 @@ FROM microsoft/aspnet:1.0.0-rc1-update1
 RUN printf "deb http://ftp.us.debian.org/debian jessie main\n" >> /etc/apt/sources.list
 RUN apt-get -qq update && apt-get install -qqy sqlite3 libsqlite3-dev && rm -rf /var/lib/apt/lists/*
 
-COPY . /app
+# Self contained Docker container setup.. copies to /app, and runs from there.
+#COPY . /app
+#WORKDIR /app
+#RUN ["dnu", "restore"]
+
+# Use the synced /vagrant folder instead
 WORKDIR /app
 RUN ["dnu", "restore"]
 
-EXPOSE 5000/tcp
+
+EXPOSE 5000
 ENTRYPOINT ["dnx", "-p", "project.json", "web"]
