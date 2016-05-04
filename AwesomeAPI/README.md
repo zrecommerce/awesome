@@ -11,6 +11,8 @@ Vagrant must be installed on your machine.
 Docker must be installed on your machine, and the docker service must be running.
 This application uses the `docker` vagrant provision and provider.
 
+See MODELS.md for initial seed data info.
+
 
 ## Start
 
@@ -32,6 +34,7 @@ You can use the following command to start a bash terminal on the docker contain
 # Replace CONTAINER_ID with the container ID or Container Name. See docker ps -a for list of containers
 docker exec -t -i CONTAINER_ID /bin/bash
 ```
+The container ID is set to "awesome-dev" in the Dockerfile.
 
 
 ## View Logs
@@ -41,4 +44,30 @@ View the logs for CONTAINER_ID as follows:
 ```
 # Replace CONTAINER_ID with the container ID or Container Name. See docker ps -a for list of containers
 docker logs CONTAINER_ID
+```
+
+## View Swagger 2.0 UI, and JSON
+
+See the UI: `http://localhost:5000/swagger/ui/index.html`
+See the JSON: `http://localhost:5000/swagger/v1/swagger.json`
+
+## DB Migrations
+The AwesomeAPI serivce uses Entity Framework 7 Migrations.
+
+To create a migration:
+
+```
+dnx ef migrations add NAME_OF_MIGRATION
+```
+
+To undo last:
+
+```
+ef migrations remove
+```
+
+To apply a migration:
+
+```
+dnx ef database update
 ```

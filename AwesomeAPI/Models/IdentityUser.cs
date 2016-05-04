@@ -4,8 +4,9 @@ namespace AwesomeAPI.Models
 {
     public class IdentityUser
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         public string Handle { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
         public bool Enabled { get; set; }
         public ACLRole Role { get; set; }

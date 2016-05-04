@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.SwaggerGen;
+using AwesomeAPI.Models;
 
 namespace AwesomeAPI
 {
@@ -27,8 +28,15 @@ namespace AwesomeAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Entity Framework 7.x
+            services.AddEntityFramework()
+                    .AddSqlite()
+                    .AddDbContext<AwesomeContext>();
+            
             // Add framework services.
             services.AddMvc();
+            
+            // Swagger 2.0
             services.AddSwaggerGen();
             services.ConfigureSwaggerDocument(options =>
             {
@@ -60,6 +68,15 @@ namespace AwesomeAPI
             
             app.UseSwaggerGen();
             app.UseSwaggerUi();
+            
+            if (env.IsDevelopment())
+            {
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
+                    serviceScope.ServiceProvider.GetService<AwesomeContext>().EnsureSeedData();
+                }
+            }
+            
         }
         
         

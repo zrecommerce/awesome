@@ -4,7 +4,7 @@ namespace AwesomeAPI.Models
 {
     public class ACLRole
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public int Weight { get; set; }
         public bool Enabled { get; set; }

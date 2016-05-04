@@ -21,4 +21,4 @@ WORKDIR /vagrant
 EXPOSE 5000
 
 # Start! Due to a bug w/ Docker and dnx-watch, we are forced to run dnu restore and then dnx-watch like this.
-CMD dnu restore && dnx-watch --dnx-args web
+CMD dnu restore && dnx ef database update && dnx-watch --dnx-args web
