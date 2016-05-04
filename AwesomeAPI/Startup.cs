@@ -7,6 +7,7 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.SwaggerGen;
 
 namespace AwesomeAPI
 {
@@ -28,6 +29,21 @@ namespace AwesomeAPI
         {
             // Add framework services.
             services.AddMvc();
+            services.AddSwaggerGen();
+            services.ConfigureSwaggerDocument(options =>
+            {
+                options.SingleApiVersion(new Info
+                {
+                    Version = "v1",
+                    Title = "AwesomeAPI",
+                    Description = "Awesome Chat service",
+                    TermsOfService = ""   
+                });
+            });
+            services.ConfigureSwaggerSchema( options =>
+            {
+                options.DescribeAllEnumsAsStrings = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +57,13 @@ namespace AwesomeAPI
             app.UseStaticFiles();
 
             app.UseMvc();
+            
+            app.UseSwaggerGen();
+            app.UseSwaggerUi();
         }
+        
+        
+        
 
         // Entry point for the application.
         public static void Main(string[] args) => Microsoft.AspNet.Hosting.WebApplication.Run<Startup>(args);

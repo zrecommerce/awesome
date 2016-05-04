@@ -7,8 +7,15 @@ RUN apt-get -qq update && apt-get install -qqy sqlite3 libsqlite3-dev && rm -rf 
 RUN ["dnu", "commands", "install", "Microsoft.Dnx.Watcher"]
 ENV PATH $PATH:/root/.dnx/bin
 
+# Generate a self signed X 509 Root cert
+COPY ./generate-self-signed-cert.sh /app/
+WORKDIR /app
+RUN bash generate-self-signed-cert.sh "awesome-dev"
+
+
 # Run directly from our synced folder.
 WORKDIR /vagrant
+
 
 # We need to specifically tell Docker we want this port exposed (Vagrant file forwards via d.ports array)
 EXPOSE 5000
