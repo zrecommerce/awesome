@@ -25,7 +25,7 @@ Note: EF 7 data seeding happens in `Models/AwesomeExtension.cs`
                             [{id: 1, name: "online"}, {id: 2, name: "away"}, {id: 3, name: "busy"}, {id: 4, name: "offline"}, {id: 5, name: "mobile"}]
 
 ## Chat
- * Channel - id, title, description, whitelist (List<IdentityUser>), blacklist (List<IdentityUser>), visibility, owner
+ * Channel - id, name, description, whitelist (List<IdentityUser>), blacklist (List<IdentityUser>), visibility, owner, messages (List<Message>)
  * Message - id, timestamp, type (MessageType), content
  * MessageType - id, name
                             [{id: 1, name: "text"}, {id: 2, name: "video"}, {id: 3, name: "image"}, {id: 4, name: "file"}]

@@ -1,0 +1,307 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Awesome API Service
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /acl-role:
+    x-swagger-router-controller: acl_role
+    get:
+      description: Returns ACL Role data.
+      operationId: aclRole
+      parameters:
+        - name: name
+          in: query
+          description: The name of the ACL Role
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ACLRoleResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /acl-resource:
+    x-swagger-router-controller: acl_resource
+    get:
+      description: Returns ACL Resource data.
+      operationId: aclResource
+      parameters:
+        - name: name
+          in: query
+          description: The name of the ACL Resource
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ACLResourceResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /acl-permission:
+    x-swagger-router-controller: acl_permission
+    get:
+      description: Returns ACL Permission data.
+      operationId: aclPermission
+      parameters:
+        - name: name
+          in: query
+          description: The name of the ACL Permission
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ACLPermissionResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /identity-user:
+    x-swagger-router-controller: identity_user
+    get:
+      description: Returns user identity data.
+      operationId: identityUser
+      parameters:
+        - name: name
+          in: query
+          description: The name of the user
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/IdentityUserResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user-status:
+    x-swagger-router-controller: user_status
+    get:
+      description: Returns user status data.
+      operationId: userStatus
+      parameters:
+        - name: name
+          in: query
+          description: The name of the user status
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/UserStatusResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /channel:
+    x-swagger-router-controller: channel
+    get:
+      description: Returns channel data
+      operationId: channel
+      parameters:
+        - name: name
+          in: query
+          description: The name of the channel
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ChannelResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /message:
+    x-swagger-router-controller: message
+    get:
+      description: Returns message data
+      operationId: message
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/MessageResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  ACLRoleResponse:
+    required:
+      - name
+      - weight
+      - enabled
+      - permissions
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      weight:
+        type: integer
+      enabled:
+        type: boolean
+      permissions:
+        type: array
+        items:
+          $ref: "#/definitions/ACLPermissionResponse"
+          
+  ACLResourceResponse:
+    required:
+      - name
+      - requiredRoles
+      - requiredPermissions
+    properties:
+      id: 
+        type: integer
+      name:
+        type: string
+      requiredRoles:
+        type: array
+        items:
+          $ref: "#/definitions/ACLRoleResponse"
+      requiredPermissions:
+        type: array
+        items: 
+          $ref: "#/definitions/ACLPermissionResponse"
+          
+  ACLPermissionResponse:
+    required:
+      - name
+    properties:
+      id:
+        type: integer
+      handle:
+        type: string
+      name:
+        type: string
+        
+  IdentityUserResponse:
+    required:
+      - handle
+      - name
+      - email
+      - enabled
+    properties:
+      id:
+        type: integer
+      handle:
+        type: string
+      name:
+        type: string
+      email:
+        type: string
+      enabled:
+        type: boolean
+      role:
+        type: array
+        items:
+          $ref: "#/definitions/ACLRoleResponse"
+      messages:
+        type: array
+        items:
+          $ref: "#/definitions/MessageResponse"
+
+  UserStatusResponse:
+    required:
+      - name
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+  
+  ChannelResponse:
+    required:
+      - name
+      - whitelist
+      - visibility
+      - owner
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      whitelist:
+        type: array
+        items:
+          $ref: "#/definitions/IdentityUserResponse"
+      blacklist:
+        type: array
+        items:
+          $ref: "#/definitions/IdentityUserResponse"
+      visibility:
+        type: boolean
+      owner:
+        type: array
+        items:
+          $ref: "#/definitions/IdentityUserResponse"
+      messages:
+        type: array
+        items:
+          $ref: "#/definitions/MessageResponse"
+          
+  MessageTypeResponse:
+    required:
+      - name
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+        
+  MessageResponse:
+    required:
+      - messageType
+      - content
+    properties:
+      id:
+        type: integer
+      timestamp:
+        type: integer
+      messageType:
+        $ref: "#/definitions/MessageTypeResponse"
+      content:
+        type: string
+        
+  
+
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
