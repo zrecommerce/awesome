@@ -22,7 +22,7 @@ paths:
     x-swagger-router-controller: acl_role
     get:
       description: Returns ACL Role data.
-      operationId: aclRole
+      operationId: methodGet
       parameters:
         - name: name
           in: query
@@ -38,6 +38,17 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+    put:
+      description: Idempotent. Update an ACL Role
+      operationId: methodPut
+      parameters:
+        
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ACLRoleResponse"
+      
   /acl-resource:
     x-swagger-router-controller: acl_resource
     get:
