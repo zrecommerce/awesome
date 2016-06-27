@@ -49,7 +49,7 @@ namespace AwesomeCore.Controllers
         
         // POST api/messagetypes
         [HttpPost]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public IActionResult Post([FromBody]MessageType value)
         {
             if (value == null)
@@ -62,7 +62,7 @@ namespace AwesomeCore.Controllers
         
         // PUT api/messagetypes/5
         [HttpPut("{id}")]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public IActionResult Put(int id, [FromBody]ACLPermission value)
         {
             // This method should be idempotent
@@ -84,7 +84,7 @@ namespace AwesomeCore.Controllers
         
         // DELETE api/messagetypes/5
         [HttpDelete("{id}")]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public void Delete(int id)
         {
             MessageType resource = _context.MessageTypes.Single(m => m.ID == id);

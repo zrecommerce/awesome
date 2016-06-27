@@ -50,7 +50,7 @@ namespace AwesomeCore.Controllers
 
         // POST api/aclpermissions
         [HttpPost]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public IActionResult Post([FromBody]ACLPermission value)
         {
             if (value == null)
@@ -63,7 +63,7 @@ namespace AwesomeCore.Controllers
 
         // PUT api/aclpermissions/5
         [HttpPut("{id}")]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public IActionResult Put(int id, [FromBody]ACLPermission value)
         {
             // This method should be idempotent
@@ -85,7 +85,7 @@ namespace AwesomeCore.Controllers
 
         // DELETE api/aclpermissions/5
         [HttpDelete("{id}")]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public void Delete(int id)
         {
             ACLPermission permission = _context.ACLPermissions.Single(m => m.ID == id);

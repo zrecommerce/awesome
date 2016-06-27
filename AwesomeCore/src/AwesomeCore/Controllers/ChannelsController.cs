@@ -48,7 +48,7 @@ namespace AwesomeCore.Controllers
         
         // POST api/channels
         [HttpPost]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public IActionResult Post([FromBody]Channel value)
         {
             if (value == null)
@@ -61,7 +61,7 @@ namespace AwesomeCore.Controllers
         
         // PUT api/channels/5
         [HttpPut("{id}")]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public IActionResult Put(int id, [FromBody]ACLPermission value)
         {
             // This method should be idempotent
@@ -83,7 +83,7 @@ namespace AwesomeCore.Controllers
         
         // DELETE api/channels/5
         [HttpDelete("{id}")]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public void Delete(int id)
         {
             Channel resource = _context.Channels.Single(m => m.ID == id);

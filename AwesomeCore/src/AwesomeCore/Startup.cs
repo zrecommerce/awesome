@@ -10,10 +10,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 
-//using Swashbuckle.SwaggerGen;
+using Swashbuckle.SwaggerGen;
+using Swashbuckle.SwaggerGen.Generator;
 using AwesomeCore.Models;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.PlatformAbstractions;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace AwesomeCore
 {
@@ -45,8 +49,9 @@ namespace AwesomeCore
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
+
             // Angular's default header name for sending the XSRF token.
-            // services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+            // See http://www.fiyazhasan.me/angularjs-anti-forgery-with-asp-net-core/
             services.AddAntiforgery(
                 antiforgeryOptions =>
                 {
@@ -71,25 +76,11 @@ namespace AwesomeCore
             services.AddMvc();
 
             // Swagger 2.0
-            /*services.AddSwaggerGen();
-            services.ConfigureSwaggerDocument(options =>
-            {
-                options.SingleApiVersion(new Info
-                {
-                    Version = "v1.0.0",
-                    Title = "AwesomeCore",
-                    Description = "Awesome Chat service",
-                    TermsOfService = ""
-                });
-            });
-            services.ConfigureSwaggerSchema(options =>
-            {
-                options.DescribeAllEnumsAsStrings = true;
-            });*/
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IAntiforgery antiforgery)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -98,20 +89,40 @@ namespace AwesomeCore
 
             app.UseApplicationInsightsExceptionTelemetry();
 
-            //app.UseIISPlatformHandler();
+
+            // Add proper support for XSRF token (cookies)
+            app.Use(next => context =>
+            {
+                if (context.Request.Path.Value.StartsWith("/api", StringComparison.OrdinalIgnoreCase))
+                {
+                    var tokens = antiforgery.GetAndStoreTokens(context);
+                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
+                        new CookieOptions() { HttpOnly = false });
+                }
+
+                return next(context);
+            });
+
             app.UseStaticFiles();
             app.UseMvc();
 
-            //app.UseSwaggerGen();
-            //app.UseSwaggerUi();
+            app.UseSwaggerGen();
+            app.UseSwaggerUi();
 
             if (env.IsDevelopment())
             {
+                // Ensure default data is available during development.
                 using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
                     serviceScope.ServiceProvider.GetService<AwesomeContext>().EnsureSeedData();
                 }
             }
+        }
+
+        private string GetXmlCommentsPath()
+        {
+            var app = PlatformServices.Default.Application;
+            return Path.Combine(app.ApplicationBasePath, Path.ChangeExtension(app.ApplicationName, "xml"));
         }
     }
 }

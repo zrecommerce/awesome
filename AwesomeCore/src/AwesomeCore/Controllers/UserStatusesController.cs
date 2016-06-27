@@ -49,7 +49,7 @@ namespace AwesomeCore.Controllers
         
         // POST api/userstatuses
         [HttpPost]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public IActionResult Post([FromBody]UserStatus value)
         {
             if (value == null)
@@ -62,7 +62,7 @@ namespace AwesomeCore.Controllers
         
         // PUT api/userstatuses/5
         [HttpPut("{id}")]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public IActionResult Put(int id, [FromBody]ACLPermission value)
         {
             // This method should be idempotent
@@ -84,7 +84,7 @@ namespace AwesomeCore.Controllers
         
         // DELETE api/userstatuses/5
         [HttpDelete("{id}")]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public void Delete(int id)
         {
             UserStatus resource = _context.UserStatuses.Single(m => m.ID == id);

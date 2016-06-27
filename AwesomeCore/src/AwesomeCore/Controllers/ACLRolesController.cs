@@ -48,7 +48,7 @@ namespace AwesomeCore.Controllers
         
         // POST api/aclroles
         [HttpPost]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public IActionResult Post([FromBody]ACLRole value)
         {
             if (value == null)
@@ -61,7 +61,7 @@ namespace AwesomeCore.Controllers
         
         // PUT api/aclroles/5
         [HttpPut("{id}")]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public IActionResult Put(int id, [FromBody]ACLPermission value)
         {
             // This method should be idempotent
@@ -83,7 +83,7 @@ namespace AwesomeCore.Controllers
         
         // DELETE api/aclroles/5
         [HttpDelete("{id}")]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public void Delete(int id)
         {
             ACLRole resource = _context.ACLRoles.Single(m => m.ID == id);

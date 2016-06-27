@@ -48,7 +48,7 @@ namespace AwesomeCore.Controllers
         
         // POST api/aclresources
         [HttpPost]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public IActionResult Post([FromBody]ACLResource value)
         {
             if (value == null)
@@ -61,7 +61,7 @@ namespace AwesomeCore.Controllers
         
         // PUT api/aclresources/5
         [HttpPut("{id}")]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public IActionResult Put(int id, [FromBody]ACLPermission value)
         {
             // This method should be idempotent
@@ -83,7 +83,7 @@ namespace AwesomeCore.Controllers
         
         // DELETE api/aclresources/5
         [HttpDelete("{id}")]
-        [ValidateAntiForgeryTokenAttribute]
+        [ValidateAntiForgeryToken]
         public void Delete(int id)
         {
             ACLResource resource = _context.ACLResources.Single(m => m.ID == id);
