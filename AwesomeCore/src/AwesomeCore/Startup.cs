@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -18,6 +19,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.PlatformAbstractions;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.FileProviders;
 
 namespace AwesomeCore
 {
@@ -77,17 +79,40 @@ namespace AwesomeCore
 
             // Swagger 2.0
             services.AddSwaggerGen();
+            
+            // Add CORS (Cross Origin Requests) headers
+            // See https://manuel-rauber.com/2016/03/29/node-js-asp-net-core-1-0-a-usage-comparison-part-4-cross-origin-resource-sharing/
+            // NOTE: For production, we must limit who can actually call these APIs!
+            // var corsBuilder = new CorsPolicyBuilder();
+            // corsBuilder.AllowAnyHeader();
+            // corsBuilder.AllowAnyMethod();
+            // corsBuilder.AllowAnyOrigin();
+            // corsBuilder.AllowCredentials();
+            
+            services.AddCors(options => 
+            {
+                options.AddPolicy("AllowFromAll",
+                builder => builder
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin()
+                .AllowCredentials());
+            });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IAntiforgery antiforgery)
         {
+            
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             app.UseApplicationInsightsRequestTelemetry();
 
             app.UseApplicationInsightsExceptionTelemetry();
+            
+            app.UseCors("AllowFromAll");
 
 
             // Add proper support for XSRF token (cookies)
@@ -102,10 +127,13 @@ namespace AwesomeCore
 
                 return next(context);
             });
-
-            app.UseStaticFiles();
+            
+            app.UseDefaultFiles();
+            //app.UseStaticFiles();
+            
+            
             app.UseMvc();
-
+            
             app.UseSwaggerGen();
             app.UseSwaggerUi();
 
