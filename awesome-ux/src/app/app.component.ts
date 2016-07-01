@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/common';
 
 import { MD_SIDENAV_DIRECTIVES } from '@angular2-material/sidenav';
 import { MD_TOOLBAR_DIRECTIVES } from '@angular2-material/toolbar';
@@ -6,7 +7,7 @@ import { MD_BUTTON_DIRECTIVES } from '@angular2-material/button';
 import { MD_CHECKBOX_DIRECTIVES } from '@angular2-material/checkbox';
 import { MD_RADIO_DIRECTIVES } from '@angular2-material/radio';
 import { MdRadioButton } from '@angular2-material/radio';  
-import { MdRadioDispatcher } from '@angular2-material/radio/radio_dispatcher';
+import { MdUniqueSelectionDispatcher } from '@angular2-material/core/coordination/unique-selection-dispatcher';
 import { MD_PROGRESS_CIRCLE_DIRECTIVES } from '@angular2-material/progress-circle';
 import { MD_PROGRESS_BAR_DIRECTIVES } from '@angular2-material/progress-bar';
 import { MD_CARD_DIRECTIVES } from '@angular2-material/card';
@@ -14,7 +15,6 @@ import { MD_INPUT_DIRECTIVES } from '@angular2-material/input';
 import { MD_LIST_DIRECTIVES } from '@angular2-material/list';
 import { MD_ICON_DIRECTIVES, MdIconRegistry } from '@angular2-material/icon';
 import { MD_TABS_DIRECTIVES } from '@angular2-material/tabs';
-//import { MdIcon, MdIconRegistry } from '@angular2-material/icon';
 
 @Component({
   moduleId: module.id,
@@ -35,7 +35,7 @@ import { MD_TABS_DIRECTIVES } from '@angular2-material/tabs';
       MD_ICON_DIRECTIVES,
       MD_TABS_DIRECTIVES
   ],
-  providers: [MdRadioDispatcher, MdIconRegistry]
+  providers: [MdUniqueSelectionDispatcher, MdIconRegistry]
 })
 export class AppComponent {
   title = 'It Works!';
@@ -45,5 +45,17 @@ export class AppComponent {
     {name: 'French fries', rating: 'Pretty good'},
   ];
 
+  firstName = 'a';
+  lastName = 'b'
+  nickname = 'c';
+
   progress: number = 0;
+
+   constructor() {
+
+    // Update the value for the progress-bar on an interval.
+    setInterval(() => {
+      this.progress = (this.progress + Math.floor(Math.random() * 4) + 1) % 100;
+    }, 200);
+  }
 }
