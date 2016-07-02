@@ -1,7 +1,12 @@
 Awesome messaging app
 =====================
 The back-end REST API service (AwesomeCore) is built upon the Microsoft C# .NET Core 1.0
+The front-end (awesome-ux) uses Angular2 Material
+The mobile client (AwesomeApp) uses Ionic Framework 2
 
+Please note, this application is in very early alpha. 
+
+## Requirements ##
 You will need the `dotnet` tools provided by Microsoft for your OS of choice.
 
 
