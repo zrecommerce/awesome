@@ -8,6 +8,7 @@ Please note, this application is in very early alpha.
 
 ## Requirements ##
 You will need the `dotnet` tools provided by Microsoft for your OS of choice.
+For the front-end, you will need `angular-cli` and `typescript` as global npm packages.
 
 
 ## Version 0.0.1 ##
